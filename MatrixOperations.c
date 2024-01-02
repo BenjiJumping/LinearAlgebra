@@ -297,7 +297,7 @@ int multiplication(int ** matrix, int row_numbers, int column_numbers)
         {
             matrix3[k] = malloc(cols * sizeof(int));
         }
-        for (int i = 0; i < row_numbers; i++) //redo, c1 = a1 * b1 + a2 * b2 ... first row summult with first column 
+        for (int i = 0; i < row_numbers; i++) //c1 = a1 * b1 + a2 * b2 ... first element of row multiplicatin with first element of column and so on
         {
             for (int j = 0; j < cols; j++)
             {
@@ -337,7 +337,7 @@ int transposition(int ** matrix, int row_numbers, int column_numbers)
     {
         transpose[k] = malloc(row_numbers * sizeof(int));
     }
-    for (int i = 0; i < row_numbers; i++)
+    for (int i = 0; i < row_numbers; i++) //very simple, just switch rows and columns
     {
         for (int j = 0; j < column_numbers; j++)
         {
@@ -355,7 +355,7 @@ int matrix_display(int ** matrix, int row_numbers, int column_numbers)
     {
         for (int j = 0; j < column_numbers; j++)
         {
-            printf("%4d", matrix[i][j]);
+            printf("%4d", matrix[i][j]); //spacing of 4, might need to be bigger if handling matrices with large values
         }
         printf("\n");
     }
