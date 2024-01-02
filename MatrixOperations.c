@@ -8,13 +8,14 @@ int subtraction(int ** matrix, int row_numbers, int column_numbers);
 int multiplication(int ** matrix, int row_numbers, int column_numbers);
 int transposition(int ** matrix, int row_numbers, int column_numbers);
 int matrix_display(int ** matrix, int row_numbers, int column_numbers);
+int quit(int ** matrix, int row_numbers);
+int free_matrix(int ** matrix, int row_numbers);
 
 int main(void)
 {
     int row_numbers, column_numbers;
     int ** matrix = init_matrix(&row_numbers, &column_numbers);
     operations(matrix, row_numbers, column_numbers);
-    //free(); //free matrix recursively
     return 0;
 }
 
@@ -55,7 +56,7 @@ int ** init_matrix(int * row_numbers, int * column_numbers)
         }
     }
 
-    * row_numbers = rows;
+    * row_numbers = rows; //because no multiple return values, assign new value to address of integers found in main
     * column_numbers = cols;
 
     return matrix;
@@ -69,11 +70,11 @@ int operations(int ** matrix, int row_numbers, int column_numbers)
     matrix_display(matrix, row_numbers, column_numbers);
     do
     {
-        printf("Pick an operation you'd like to perform on the matrix:\n1) Addition\n2) Subtraction\n3) Multiplication\n4) Transposition\n5) Reset\n");
+        printf("Pick an operation you'd like to perform on the matrix:\n1) Addition\n2) Subtraction\n3) Multiplication\n4) Transposition\n5) Reset\n6) Exit\n");
         status = scanf("%d", &choice);
         int c;
         while (c = getchar() != '\n' && c != EOF);
-    } while (status != 1 || choice < 1 || choice > 5);
+    } while (status != 1 || choice < 1 || choice > 6);
     
     if (choice == 1)
     {
@@ -93,7 +94,12 @@ int operations(int ** matrix, int row_numbers, int column_numbers)
     }
     else if (choice == 5)
     {
+        free_matrix(matrix, row_numbers);
         main();
+    }
+    else if (choice == 6)
+    {
+        quit(matrix, row_numbers);
     }
 }
 
@@ -156,12 +162,17 @@ int addition(int ** matrix, int row_numbers, int column_numbers)
         printf("\n=\n\n");
         matrix_display(matrix3, row_numbers, column_numbers);
 
+        //free matrices of memory allocation
+        free_matrix(matrix1, row_numbers);
+        free_matrix(matrix2, rows);
+
         //revert back to 
         operations(matrix3, row_numbers, column_numbers);
     }
     else
     {
         printf("\nMatrices are not the same dimensions. Unable to add up.\n");
+        free_matrix(matrix2, rows);
         operations(matrix1, row_numbers, column_numbers);
     }
 }
@@ -226,12 +237,17 @@ int subtraction(int ** matrix, int row_numbers, int column_numbers)
         printf("\n=\n\n");
         matrix_display(matrix3, row_numbers, column_numbers);
 
+        //free matrices of memory allocation
+        free_matrix(matrix1, row_numbers);
+        free_matrix(matrix2, rows);
+
         //revert back to 
         operations(matrix3, row_numbers, column_numbers);
     }
     else
     {
         printf("\nMatrices are not the same dimensions. Unable to subtract.\n");
+        free_matrix(matrix2, rows);
         operations(matrix1, row_numbers, column_numbers);
     }
 }
@@ -300,6 +316,10 @@ int multiplication(int ** matrix, int row_numbers, int column_numbers)
         printf("\n=\n\n");
         matrix_display(matrix3, row_numbers, cols);
 
+        //free matrices of memory allocation
+        free_matrix(matrix1, row_numbers);
+        free_matrix(matrix2, rows);
+
         //revert back to 
         operations(matrix3, row_numbers, cols);
     }
@@ -325,6 +345,7 @@ int transposition(int ** matrix, int row_numbers, int column_numbers)
         }
     }
     matrix_display(transpose, column_numbers, row_numbers);
+    free_matrix(matrix, row_numbers);
     operations(transpose, column_numbers, row_numbers);
 }
 
@@ -337,5 +358,24 @@ int matrix_display(int ** matrix, int row_numbers, int column_numbers)
             printf("%4d", matrix[i][j]);
         }
         printf("\n");
+    }
+}
+
+int quit(int ** matrix, int row_numbers)
+{
+    free_matrix(matrix, row_numbers);
+    printf("Exiting Program");
+    exit(0);
+}
+
+int free_matrix(int ** matrix, int row_numbers)
+{
+    if (matrix != NULL)
+    {
+        for (int i = 0; i < row_numbers; i++)
+        {
+            free(matrix[i]);
+        }
+        free(matrix);
     }
 }
